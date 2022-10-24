@@ -7,7 +7,10 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.41"
+    "simple-proof-of-age": "file:..\\..\\..\\Desktop\\TUM\\workspace\\zkapp\\sudoku1",
+    "sudoku1": "https://github.com/btemuer/simple-proof-of-age",
+    "vue": "^3.2.41",
+    "zkapp-cli": "^0.4.17"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.4",

@@ -1,51 +1,74 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useLoadingBar, useMessage, useNotification } from "naive-ui";
-
-//import { SimpleAgeProof_ } from "simple-proof-of-age";
-
+import { useLoadingBar, useMessage, useNotification, NIcon } from "naive-ui";
+import { SimpleZkapp_ } from "zkapp-snarkyjs";
 import {
   Field,
   PrivateKey,
   PublicKey,
   Mina,
   isReady,
+  shutdown,
   fetchAccount,
   setGraphqlEndpoint,
 } from "snarkyjs";
-
-// ui components
+// ui - components
 const loadingBar = useLoadingBar();
 const message = useMessage();
 const notification = useNotification();
 const loadingSnarkyJs = ref(true);
-
 // zk-app
-const zkAppState = ref("");
+const zkappState = ref("");
 const zkApp = ref({});
 const transaction = ref({});
-const proofOfAge = ref();
-
+const equationAnswer = ref();
 // keys
 const publicKey_ = ref("");
 const privateKey_ = ref("");
-
+// prefunded accounts [ public / private ]
+const prefundedAccounts = [
+  [
+    "B62qqBAUo5smz1whfdRjniFUnPv1V4Z1Y2VFPv16Zp1Z4497wmXmBgR",
+    "EKEGgnxvJZCAdoWWVpP2xdXpEMnYcbiWs7Z3sma3xSfnyY2tzt4C",
+  ],
+  [
+    "B62qrr2RZSaDtPDcifbbczkugvCBptRRACeFhL4M1sYbZWt66NU1hy3",
+    "EKE6we4DHzjpq6q2bK5rNyq9DQ5ZHP4bA23T8bPZCBvzxGxYc7Fo",
+  ],
+  [
+    "B62qoQKcwPWbYPbuM5wRN9kGQXxgXGuHadL694tbw9ZoYctExz7cepW",
+    "EKEjSbJVEx4qPjHJzEd1HSGLQeGCA51SLU473ECvWppnhuhEh3c7",
+  ],
+  [
+    "B62qp41xP6LQvwoyk3wjVEXoUBvkRm5wTDoZbeAooWNYzA5U5Wt2t2e",
+    "EKF8gg8dkhH6Dj7XAs3FCBX6BFBaffjAWqFRPCjpE29GdBuggDrQ",
+  ],
+  [
+    "B62qqkRPb1njwuwQ9VMJV39enASmkB3BvQDfpakhKryY4sGAMtzoqY5",
+    "EKFHoANnDUaMCMc9gLqte5cgjE4WEgWsUFLMSH2yYQYL7FG8gdb5",
+  ],
+];
 const generateNewKeys = () => {
   const privateKey__ = PrivateKey.random();
   privateKey_.value = privateKey__.toBase58();
   publicKey_.value = privateKey__.toPublicKey().toBase58();
 };
-
+const generatePrefundedKeys = () => {
+  let keyPair =
+    prefundedAccounts[Math.floor(Math.random() * prefundedAccounts.length)];
+  privateKey_.value = keyPair[1];
+  publicKey_.value = keyPair[0];
+};
 // this is the steps vals
 const stepsStatus = ref({
   currentStatus: "process",
   current: 1,
 });
-
-//////////////////////////////////////////////////////////////////////////////
-const zkAppAddress = "B62qoLynqr8QVQs33QChrw4sDdvfBd5DUvLB1Zf32Ei8XdQdzTJFefN";
-//////////////////////////////////////////////////////////////////////////////
-
+// const currentStatus = ref("process")
+// const current = ref(1)
+// some other vars
+// redeployed contract address:
+const zkAppAddress = "B62qiY3PVYcjdDfQehgSJDgKUsGbg5WwkEeD26Jb9ZxExRQ4xjW1AMg";
 const steps = ref({
   1: {
     isFinished: false,
@@ -72,48 +95,40 @@ const steps = ref({
     isLoading: false,
   },
 });
-
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
-
 onMounted(async () => {
   let msg = message.create("Loading", { type: "success", duration: 10000 });
   await sleep(1500);
   await isReady;
   loadingSnarkyJs.value = false;
-
   // create Berkeley connection
   const graphqlEndpoint = "https://proxy.berkeley.minaexplorer.com/graphql";
   setGraphqlEndpoint(graphqlEndpoint);
   let Berkeley = Mina.BerkeleyQANet(graphqlEndpoint);
   Mina.setActiveInstance(Berkeley);
-  msg.content = "Connected to Berkeley!";
+  msg.content = "Ready to interact with berkeley!";
 });
-
 const checkAccountBalance = async () => {
   loadingBar.start();
   steps.value[1].isLoading = true;
-
   if (!publicKey_.value) {
     message.warning("Generate or input a key pair!");
     loadingBar.error();
     steps.value[1].isLoading = false;
     return;
   } else {
-    console.log("try to fetch an account", publicKey_.value);
-
+    console.log("try fetch an account", publicKey_.value);
     let { account, error } = await fetchAccount({
       publicKey: PublicKey.fromBase58(publicKey_.value),
     });
-
     console.log("account", account);
     console.log("error", JSON.stringify(error, null, 2));
-
     if (account) {
       message.success(`Account balance: ${account.balance}`);
     } else {
-      message.warning("No balance in the account?");
+      message.warning("account balance is empty?");
       loadingBar.error();
       steps.value[1].isLoading = false;
       return;
@@ -124,39 +139,39 @@ const checkAccountBalance = async () => {
   stepsStatus.value.current = 2;
   loadingBar.finish();
 };
-
 const compileZkApp = async (zkAppAddress) => {
   loadingBar.start();
   steps.value[2].isLoading = true;
   await sleep(500);
-  message.warning("This may take a while. Please be patient.");
-
+  message.warning(
+    `This will take a while. Arm yourself with patience. The browser might not respond for a while...`
+  );
+  const n = notification.create({
+    title: "Why compile?",
+    content: `Usually smart contracts sit on chain and we can trigger a method by sending a transaction. Then the network will run the method of the smart contract.
+    \nBut thats not what we're going to do. Instead, we fetch the smart contract and compile it locally so that we can run it in our local environment (the browser). The network nodes will not run it for us.`,
+  });
   // compile the zkapp
-  console.log("Before compiling");
+  console.log("before compiling");
   await sleep(1500);
   console.log("Compiling smart contract...", zkAppAddress);
-  await ZkProofOfAge_.compile();
-  console.log(ZkProofOfAge_);
-  console.log("Done.");
+  await SimpleZkapp_.compile();
+  console.log(SimpleZkapp_);
+  console.log("done");
   steps.value[2].isLoading = false;
   steps.value[2].isFinished = true;
   stepsStatus.value.current = 3;
   loadingBar.finish();
 };
-
-const getZkAppState = async (zkAppAddress) => {
+const getZkAppState = async (zkappAddress) => {
   loadingBar.start();
   steps.value[3].isLoading = true;
-
   console.log("PUBLICKEY: ", zkAppAddress, PublicKey.fromBase58(zkAppAddress));
-
   let { account, error } = await fetchAccount({
     publicKey: PublicKey.fromBase58(zkAppAddress),
   });
-
   console.log("account", JSON.stringify(account, null, 2));
   console.log("error", JSON.stringify(error, null, 2));
-
   if (error) {
     steps.value[3].isLoading = false;
     steps.value[3].isFinished = true;
@@ -164,14 +179,12 @@ const getZkAppState = async (zkAppAddress) => {
     loadingBar.error();
     return;
   }
-
   // create the zkapp object
   try {
-    zkApp.value = new ZkProofOfAge_(PublicKey.fromBase58(zkAppAddress));
+    zkApp.value = new SimpleZkapp_(PublicKey.fromBase58(zkAppAddress));
     let value = zkApp.value.value.get();
-    zkAppState.value = value;
-
-    console.log(`Found deployed zkapp with state ${value.toBase58()}`);
+    zkappState.value = value;
+    console.log(`Found deployed zkapp, with state ${value.toBase58()}`);
   } catch (error) {
     steps.value[3].isLoading = false;
     steps.value[3].isFinished = true;
@@ -184,18 +197,17 @@ const getZkAppState = async (zkAppAddress) => {
   stepsStatus.value.current = 4;
   loadingBar.finish();
 };
-
 const createTransaction = async () => {
   loadingBar.start();
   steps.value[4].isLoading = true;
-  console.log("Creating transaction");
+  console.log("creating transaction");
   try {
     let feePayerKey = PrivateKey.fromBase58(privateKey_.value);
     transaction.value = await Mina.transaction(
-      { feePayerKey, fee: "1" },
+      { feePayerKey, fee: "300_000_000" },
       () => {
-        zkApp.value.submitProofOfAge(
-          Field(proofOfAge.value),
+        zkApp.value.giveAnswer(
+          Field(equationAnswer.value),
           PublicKey.fromBase58(publicKey_.value)
         );
       }
@@ -220,19 +232,17 @@ const createTransaction = async () => {
   stepsStatus.value.current = 5;
   loadingBar.finish();
 };
-
 const createProof = async () => {
-  message.warning("This may take a while. Please be patient.");
-
+  message.warning(
+    "This will take a while. Arm yourself with patience. The browser might not respond for a while..."
+  );
   loadingBar.start();
   steps.value[5].isLoading = true;
   notification.create({
     title: "Why do we need a proof?",
     content: `A generated proof is a long string containing a cryptographic proof, that you did run this zkApp method in your browser.\n\nYou will send a transaction that will modify an on-chain value only if you know the correct answer to the equation and have the proof you ran this exact zkApp method.`,
   });
-
   await sleep(500);
-
   try {
     await transaction.value.prove();
     console.log(
@@ -245,7 +255,6 @@ const createProof = async () => {
     loadingBar.error();
     return;
   }
-
   notification.create({
     title: "Bingo, you successfully generated the proof!",
     content:
@@ -256,17 +265,14 @@ const createProof = async () => {
       ) +
       " ...",
   });
-
   steps.value[5].isLoading = false;
   steps.value[5].isFinished = true;
   stepsStatus.value.current = 6;
   loadingBar.finish();
 };
-
 const broadcastTransaction = async () => {
   loadingBar.start();
   steps.value[6].isLoading = true;
-
   // send the transaction to the graphql endpoint
   console.log("Sending the transaction...");
   try {
@@ -274,7 +280,7 @@ const broadcastTransaction = async () => {
     let txHash = await sendZkapp.hash();
     console.log(txHash);
     message.success(
-      "Transaction sent 🚀. The state of the smart contract will be updated after the transaction is included into the next block!",
+      "Transaction send 🚀🚀🚀. The state of the smart contract will be updated after transaction is included into the next block!",
       { duration: 10000 }
     );
     notification.create({
@@ -296,6 +302,7 @@ const broadcastTransaction = async () => {
   steps.value[6].isFinished = true;
   stepsStatus.value.current = 6;
   loadingBar.finish();
+  // await shutdown();
 };
 </script>
 
@@ -318,12 +325,15 @@ const broadcastTransaction = async () => {
       <n-button @click="generateNewKeys()"
         >Generate new key pair (will have to fund via faucet)</n-button
       >
+      <n-button @click="generatePrefundedKeys()"
+        >Randomly pick keys from one of prefunded accounts</n-button
+      >
       <n-input-group>
-        <n-input-group-label>Public Key</n-input-group-label>
+        <n-input-group-label>public key</n-input-group-label>
         <n-input v-model:value="publicKey_" />
       </n-input-group>
       <n-input-group>
-        <n-input-group-label>Private Key</n-input-group-label>
+        <n-input-group-label>private key</n-input-group-label>
         <n-input v-model:value="privateKey_" />
       </n-input-group>
       <n-text>
@@ -341,6 +351,11 @@ const broadcastTransaction = async () => {
         :current="stepsStatus.current"
         :status="stepsStatus.currentStatus"
       >
+        <!-- <n-step title="Establish blockchain connection">
+        <n-space vertical>
+          <n-button @click="connectToNetwork()" :loading="steps[1].isLoading" >connect</n-button>
+        </n-space>
+      </n-step> -->
         <n-step title="Check if selected account has enough funds">
           <n-space vertical>
             <n-button
@@ -354,7 +369,10 @@ const broadcastTransaction = async () => {
           <n-space vertical>
             <div>
               Check out the smart contract
-              <a href="https://github.com/">here</a>.
+              <a
+                href="https://github.com/RaidasGrisk/zkapp-snarkyjs/blob/main/src/zkapp.ts"
+                >here</a
+              >.
             </div>
             <!-- <n-tag type="warning" size="small" round :bordered="false">local</n-tag> -->
             <n-button
@@ -366,11 +384,12 @@ const broadcastTransaction = async () => {
         </n-step>
         <n-step title="Check the smart contract state on-chain">
           <n-space vertical>
+            <!-- <n-tag type="warning" size="small" round :bordered="false">remote</n-tag> -->
             The state is a single variable. It is an on-chain value showing the
             public address of the last account that solved the equation and sent
             over the generated proof.
             <n-button
-              @click="getZkAppState(zkAppAddress)"
+              @click="getZkAppState(zkappAddress)"
               :loading="steps[3].isLoading"
               >Check</n-button
             >
@@ -380,22 +399,23 @@ const broadcastTransaction = async () => {
               </div>
               <div else>
                 <n-text depth="3">
-                  {{ zkAppState ? zkAppState : "" }}
+                  {{ zkappState ? zkappState : "" }}
                 </n-text>
               </div>
             </n-tag>
-            You will update this state if you are older than 18.
+            You will update this state if you solve the equation below.
           </n-space>
         </n-step>
         <n-step title="Call the smart contract method">
           <n-space>
+            <!-- <n-tag type="warning" size="small" round :bordered="false">local</n-tag> -->
             <div>
               Input your answer and run the smart contract method
               <b>locally in the browser</b>.
             </div>
             <n-input
-              placeholder="Proof of your age from the previous step"
-              v-model:value="proofOfAge"
+              placeholder="10 / 2 + 2 = ?"
+              v-model:value="equationAnswer"
             ></n-input>
             <n-button @click="createTransaction()" :loading="steps[4].isLoading"
               >Call</n-button
@@ -404,7 +424,7 @@ const broadcastTransaction = async () => {
         </n-step>
         <n-step title="Create the zero knowledge proof">
           <n-space vertical>
-            The proof will confirm that all the things that happened in your
+            The proof will confirm, that all the things that happened in your
             browser while interacting with the smart contract are legit.
             <n-button @click="createProof()" :loading="steps[5].isLoading"
               >Create</n-button
