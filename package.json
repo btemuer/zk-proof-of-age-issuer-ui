@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "simple-proof-of-age": "https://github.com/btemuer/simple-proof-of-age",
+    "vite-plugin-cross-origin-isolation": "^0.1.6",
     "vue": "^3.2.41",
     "zkapp-cli": "^0.4.17"
   },
