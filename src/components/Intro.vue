@@ -25,7 +25,10 @@ import { ref } from "vue";
         <n-text type="info">
           For any kind of activity on the internet requiring age verification,
           like shopping for liquor. Yet, you don't want to reveal any
-          information about yourself, including your age. You can do this on the
+          information about yourself, including your age.
+        </n-text>
+        <n-text type="info">
+          You can do this on the
           <n-text type="primary"><b>Mina blockchain!</b></n-text>
         </n-text>
       </n-h4>
