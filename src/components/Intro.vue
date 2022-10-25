@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 <template>
   <br /><br />
-  <div style="max-width: 600px">
+  <div style="max-width: 800px">
     <n-space vertical>
       <n-tag :size="'large'" style="padding: 50px" :bordered="false" round>
         <n-text
@@ -23,9 +23,10 @@ import { ref } from "vue";
       </n-h1>
       <n-h4>
         <n-text type="info">
-          But you don't want to reveal any more information, including your age.
-          You can do this on the
-          <n-text type="primary"><b>Mina blockchain.</b></n-text>
+          For any kind of activity on the internet requiring age verification,
+          like shopping for liquor. Yet, you don't want to reveal any
+          information about yourself, including your age. You can do this on the
+          <n-text type="primary"><b>Mina blockchain!</b></n-text>
         </n-text>
       </n-h4>
     </n-space>
