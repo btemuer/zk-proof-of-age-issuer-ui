@@ -14,7 +14,7 @@ import { ref } from "vue";
           style="font-size: 15px"
         >
           This is a community effort of the
-          <a href="https://minaprotocol.com/">Mina Protocol</a>
+          <a href="https://minaprotocol.com/">Mina Protocol.</a>
         </n-text>
       </n-tag>
       <br />
