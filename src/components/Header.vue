@@ -6,7 +6,7 @@ import { ref } from "vue";
   <n-page-header subtitle="">
     <template #title>
       <a href="/" style="text-decoration: none; color: inherit">
-        <b>Zero Knowledge</b> <n-text depth="3">Proof of Age</n-text>
+        <n-text depth="3">Zero Knowledge</n-text> <b>Proof of Age</b>
       </a>
     </template>
     <template #header> </template>
