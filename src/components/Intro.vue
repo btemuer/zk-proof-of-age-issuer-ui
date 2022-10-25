@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 <template>
   <br /><br />
-  <div style="max-width: 700px">
+  <div style="max-width: 750px">
     <n-space vertical>
       <n-tag :size="'tiny'" style="padding: 30px" :bordered="false" round>
         <n-text
@@ -20,7 +20,7 @@ import { ref } from "vue";
       <br />
       <n-h1>
         <n-text type="primary">
-          Do you want to prove you are older than 18?
+          Do you want to prove that you are older than 18?
         </n-text>
       </n-h1>
       <n-h4>
