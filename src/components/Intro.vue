@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 <template>
   <br /><br />
-  <div style="max-width: 800px">
+  <div style="max-width: 700px">
     <n-space vertical>
       <n-tag :size="'large'" style="padding: 50px" :bordered="false" round>
         <n-text
