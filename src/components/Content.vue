@@ -367,7 +367,7 @@ const broadcastTransaction = async () => {
         <n-step title="Check the smart contract state on-chain">
           <n-space vertical>
             The state is a single boolean (yes/no) variable. It is an on-chain
-            value showing if the age verification was successful.
+            value showing if the age has been proven successfully.
             <n-button
               @click="getZkAppState(zkAppAddress)"
               :loading="steps[3].isLoading"
@@ -404,7 +404,7 @@ const broadcastTransaction = async () => {
         <n-step title="Create the zero knowledge proof">
           <n-space vertical>
             The proof will confirm that all the things that happened in your
-            browser while interacting with the smart contract are legit.
+            browser while interacting with the smart contract are legitimate.
             <n-button @click="createProof()" :loading="steps[5].isLoading"
               >Create</n-button
             >
