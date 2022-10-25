@@ -13,7 +13,7 @@ import { ref } from "vue";
           depth="3"
           style="font-size: 15px"
         >
-          This is a community effort of the
+          This is a community effort on the
           <a href="https://minaprotocol.com/">Mina Protocol.</a>
         </n-text>
       </n-tag>
