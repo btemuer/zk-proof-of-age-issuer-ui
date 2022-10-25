@@ -312,9 +312,9 @@ const broadcastTransaction = async () => {
 
     <n-space vertical>
       <n-h2
-        >Before we begin, make sure you have an account with some mina in
-        it</n-h2
-      >
+        >Before we begin, make sure you have an account with a high enough
+        balance. The transaction will cost 1 Mina.
+      </n-h2>
       <n-button @click="generateNewKeys()"
         >Generate new key pair (will have to fund via faucet)</n-button
       >
@@ -327,7 +327,7 @@ const broadcastTransaction = async () => {
         <n-input v-model:value="privateKey_" />
       </n-input-group>
       <n-text>
-        Before moving forward make sure the account already has some mina in it.
+        If you generated a new key pair, you can request mina at the
         <a href="https://berkeley.minaexplorer.com/faucet">Faucet link</a>.
       </n-text>
     </n-space>
