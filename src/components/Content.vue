@@ -312,8 +312,7 @@ const broadcastTransaction = async () => {
 
     <n-space vertical>
       <n-h2
-        >Before we begin, make sure you have an account with a high enough
-        balance. The transaction will cost 1 mina.
+        >Before we begin, make sure you have an account with a balance.
       </n-h2>
       <n-text>
         Or, if you do not have an account, you can click the button below to
@@ -342,8 +341,9 @@ const broadcastTransaction = async () => {
         :current="stepsStatus.current"
         :status="stepsStatus.currentStatus"
       >
-        <n-step title="Check if selected account has enough funds">
+        <n-step title="Check if the account has enough funds.">
           <n-space vertical>
+            The transaction will cost 1 mina.
             <n-button
               @click="checkAccountBalance()"
               :loading="steps[1].isLoading"
@@ -351,17 +351,16 @@ const broadcastTransaction = async () => {
             >
           </n-space>
         </n-step>
-        <n-step title="Compile the smart contract we will interact with">
+        <n-step title="Compile the smart contract we will interact with.">
           <n-space vertical>
             <div>
               Check out the smart contract
               <a href="https://github.com/">here</a>.
             </div>
-            <!-- <n-tag type="warning" size="small" round :bordered="false">local</n-tag> -->
             <n-button
               @click="compileZkApp(zkAppAddress)"
               :loading="steps[2].isLoading"
-              >compile</n-button
+              >Compile</n-button
             >
           </n-space>
         </n-step>
