@@ -323,7 +323,6 @@ const broadcastTransaction = async () => {
       </n-text>
       <n-button @click="generateNewKeys()">Generate new pair of keys</n-button>
       <br />
-      <br />
       <n-input-group>
         <n-input-group-label>Public Key</n-input-group-label>
         <n-input v-model:value="publicKey_" />
