@@ -26,7 +26,7 @@ import { ref } from "vue";
         <n-text type="info">
           You may want to do this for any kind of activity on the internet
           requiring age verification, like shopping for liquor.
-          <br 2 />
+          <br />
           Yet, you don't want to reveal any information about yourself,
           including your age.
           <br />
