@@ -11,7 +11,7 @@ import { ref } from "vue";
           type="tertiary"
           :strong="true"
           depth="3"
-          style="font-size: 10px"
+          style="font-size: 14px"
         >
           A community effort on the
           <a href="https://minaprotocol.com/">Mina Protocol</a>.
