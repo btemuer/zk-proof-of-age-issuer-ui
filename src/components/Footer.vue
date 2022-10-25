@@ -5,7 +5,7 @@ import { ref } from "vue";
 <template>
   <br /><br />
   <n-space justify="center">
-    <n-h3>Zk Proof of Age</n-h3>
+    <n-h3>Zero Knowledge Proof of Age - zkApp by <b>temmuz</b> </n-h3>
   </n-space>
   <br /><br />
 </template>
