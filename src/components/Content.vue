@@ -341,7 +341,7 @@ const broadcastTransaction = async () => {
         :current="stepsStatus.current"
         :status="stepsStatus.currentStatus"
       >
-        <n-step title="Check if the account has enough funds.">
+        <n-step title="Check if the account has funds">
           <n-space vertical>
             The transaction will cost 1 mina.
             <n-button
@@ -351,7 +351,7 @@ const broadcastTransaction = async () => {
             >
           </n-space>
         </n-step>
-        <n-step title="Compile the smart contract we will interact with.">
+        <n-step title="Compile the smart contract we will interact with">
           <n-space vertical>
             <div>
               Check out the smart contract
@@ -366,9 +366,8 @@ const broadcastTransaction = async () => {
         </n-step>
         <n-step title="Check the smart contract state on-chain">
           <n-space vertical>
-            The state is a single variable. It is an on-chain value showing the
-            public address of the last account that solved the equation and sent
-            over the generated proof.
+            The state is a single boolean (yes/no) variable. It is an on-chain
+            value showing if the age verification was successful.
             <n-button
               @click="getZkAppState(zkAppAddress)"
               :loading="steps[3].isLoading"
@@ -394,7 +393,7 @@ const broadcastTransaction = async () => {
               <b>locally in the browser</b>.
             </div>
             <n-input
-              placeholder="Proof of your age from the previous step"
+              placeholder="Your Proof of Age"
               v-model:value="proofOfAge"
             ></n-input>
             <n-button @click="createTransaction()" :loading="steps[4].isLoading"
