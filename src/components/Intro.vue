@@ -6,12 +6,12 @@ import { ref } from "vue";
   <br /><br />
   <div style="max-width: 700px">
     <n-space vertical>
-      <n-tag :size="'small'" style="padding: 40px" :bordered="false" round>
+      <n-tag :size="'tiny'" style="padding: 30px" :bordered="false" round>
         <n-text
           type="tertiary"
           :strong="true"
           depth="3"
-          style="font-size: 15px"
+          style="font-size: 10px"
         >
           A community effort on the
           <a href="https://minaprotocol.com/">Mina Protocol</a>.
