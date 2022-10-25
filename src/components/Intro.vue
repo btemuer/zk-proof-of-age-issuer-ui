@@ -13,6 +13,7 @@ import { ref } from "vue";
           depth="3"
           style="font-size: 20px"
         >
+          Mina Protocol
         </n-text>
       </n-tag>
       <br />
@@ -25,11 +26,11 @@ import { ref } from "vue";
         <n-text type="info">
           You may want to do this for any kind of activity on the internet
           requiring age verification, like shopping for liquor.
-          <br />
+          <br 2 />
           Yet, you don't want to reveal any information about yourself,
           including your age.
           <br />
-          You can do this on the
+          This zkApp will let you accomplish just that on the
           <n-text type="primary"><b>Mina blockchain!</b></n-text>
         </n-text>
       </n-h4>
