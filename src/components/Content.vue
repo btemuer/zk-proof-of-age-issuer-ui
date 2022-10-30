@@ -336,10 +336,11 @@ const broadcastTransaction = async () => {
         <n-input v-model:value="privateKey_" />
       </n-input-group>
       <br />
-      <n-h2>
-        The oracle must have deployed a personalized zkApp for you. Please enter
-        the public key of this address.
-      </n-h2>
+      <n-h2> The oracle must have deployed a personalized zkApp for you. </n-h2>
+      <n-text>
+        Please enter the public key of this address. Only you will be able to
+        interact with this zkApp.</n-text
+      >
       <br />
       <n-input-group>
         <n-input-group-label>zkApp Public Key</n-input-group-label>
