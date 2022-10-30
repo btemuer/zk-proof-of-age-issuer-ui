@@ -21,6 +21,7 @@ const notification = useNotification();
 const loadingSnarkyJs = ref(true);
 
 // zk-app
+const zkAppAddress = ref("");
 const zkAppState = ref("");
 const zkApp = ref({});
 const transaction = ref({});
@@ -43,7 +44,7 @@ const stepsStatus = ref({
 });
 
 //////////////////////////////////////////////////////////////////////////////
-const zkAppAddress = "B62qqfd5tf33ZDECofurV6fny9dCUFuoqji85z9VNAqS3QMxJm99hoF";
+//const zkAppAddress = "B62qqfd5tf33ZDECofurV6fny9dCUFuoqji85z9VNAqS3QMxJm99hoF";
 //////////////////////////////////////////////////////////////////////////////
 
 const steps = ref({
@@ -334,6 +335,17 @@ const broadcastTransaction = async () => {
         <n-input-group-label>Private Key</n-input-group-label>
         <n-input v-model:value="privateKey_" />
       </n-input-group>
+      <br />
+      <n-h2>
+        The oracle must have deployed a personalized zkApp for you. Please enter
+        the public key of this address.
+      </n-h2>
+      <br />
+      <n-input-group>
+        <n-input-group-label>zkApp Public Key</n-input-group-label>
+        <n-input v-model:value="zkAppAddress" />
+      </n-input-group>
+      <br />
     </n-space>
     <br /><br />
     <n-divider />
