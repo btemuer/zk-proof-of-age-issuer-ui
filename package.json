@@ -8,7 +8,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "simple-proof-of-age": "file:simple-proof-of-age",
+    "simple-proof-of-age": "^0.1.0",
     "snarkyjs": "^0.6.1",
     "vite-plugin-cross-origin-isolation": "^0.1.6",
     "vue": "^3.2.41",
