@@ -25,6 +25,8 @@ const zkAppAddress = ref("");
 const zkAppState = ref("");
 const zkApp = ref({});
 const transaction = ref({});
+const oracleID = ref("");
+const age = ref("");
 const proofOfAge = ref();
 
 // keys
@@ -382,8 +384,8 @@ const broadcastTransaction = async () => {
         </n-step>
         <n-step title="Check the smart contract state on-chain">
           <n-space vertical>
-            The state is a public key of the last account who proved their age
-            successfully.
+            The state is an on-state yes or no variable. It will be yes if the
+            age has been proven successfully.
             <n-button
               @click="getZkAppState(zkAppAddress)"
               :loading="steps[3].isLoading"
@@ -403,15 +405,21 @@ const broadcastTransaction = async () => {
           </n-space>
         </n-step>
         <n-step title="Call the smart contract method">
-          <n-space>
+          <n-space vertical>
             <div>
-              Input your answer and run the smart contract method
-              <b>locally in the browser</b>.
+              In order to this, please input your Oracle ID and your age. No
+              worries, these informations are not shared with anyone. They are
+              only used for computations done
+              <b>locally in your browser</b>.
             </div>
-            <n-input
-              placeholder="How old are you?"
-              v-model:value="proofOfAge"
-            ></n-input>
+            <n-input-group>
+              <n-input-group-label>Your Oracle ID</n-input-group-label>
+              <n-input v-model:value="oracleID" />
+            </n-input-group>
+            <n-input-group>
+              <n-input-group-label>Your Age</n-input-group-label>
+              <n-input v-model:value="age" />
+            </n-input-group>
             <n-button @click="createTransaction()" :loading="steps[4].isLoading"
               >Call</n-button
             >
