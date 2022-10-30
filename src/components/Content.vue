@@ -25,8 +25,8 @@ const zkAppAddress = ref("");
 const zkAppState = ref("");
 const zkApp = ref({});
 const transaction = ref({});
-const oracleID = ref("");
-const age = ref("");
+const userOracleID = ref();
+const useAge = ref();
 const proofOfAge = ref();
 
 // keys
@@ -200,7 +200,8 @@ const createTransaction = async () => {
       { feePayerKey, fee: "100_000_000" },
       () => {
         zkApp.value.giveAnswer(
-          Field(proofOfAge.value),
+          Field(userOracleID.value),
+          Field(useAge.value),
           PublicKey.fromBase58(publicKey_.value)
         );
       }
@@ -384,8 +385,8 @@ const broadcastTransaction = async () => {
         </n-step>
         <n-step title="Check the smart contract state on-chain">
           <n-space vertical>
-            The state is an on-state yes or no variable. It will be yes if the
-            age has been proven successfully.
+            The state is a public key. It will be updated with your public key
+            if you prove your age successfully.
             <n-button
               @click="getZkAppState(zkAppAddress)"
               :loading="steps[3].isLoading"
@@ -408,17 +409,17 @@ const broadcastTransaction = async () => {
           <n-space vertical>
             <div>
               In order to this, please input your Oracle ID and your age. No
-              worries, these informations are not shared with anyone. They are
+              worries, none of this information is shared with anyone. They are
               only used for computations done
               <b>locally in your browser</b>.
             </div>
             <n-input-group>
               <n-input-group-label>Your Oracle ID</n-input-group-label>
-              <n-input v-model:value="oracleID" />
+              <n-input v-model:value="userOracleID" />
             </n-input-group>
             <n-input-group>
               <n-input-group-label>Your Age</n-input-group-label>
-              <n-input v-model:value="age" />
+              <n-input v-model:value="useAge" />
             </n-input-group>
             <n-button @click="createTransaction()" :loading="steps[4].isLoading"
               >Call</n-button
