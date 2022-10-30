@@ -386,7 +386,8 @@ const broadcastTransaction = async () => {
         <n-step title="Check the smart contract state on-chain">
           <n-space vertical>
             The state is a public key. It will be updated with your public key
-            if you prove your age successfully.
+            if you prove your age successfully, showing that the address belongs
+            to a person above 18.
             <n-button
               @click="getZkAppState(zkAppAddress)"
               :loading="steps[3].isLoading"
