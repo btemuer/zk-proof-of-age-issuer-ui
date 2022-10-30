@@ -228,15 +228,12 @@ const createProof = async () => {
 
   loadingBar.start();
   steps.value[5].isLoading = true;
-  notification.create({
-    title: "Why do we need a proof?",
-    content: `A generated proof is a long string containing a cryptographic proof, that you did run this zkApp method in your browser.\n\nYou will send a transaction that will modify an on-chain value only if you know the correct answer to the equation and have the proof you ran this exact zkApp method.`,
-  });
 
   await sleep(500);
 
   try {
     await transaction.value.prove();
+    console.log("Transaction proof:");
     console.log(
       transaction.value.transaction.accountUpdates[0].authorization.proof
     );
@@ -251,7 +248,7 @@ const createProof = async () => {
   notification.create({
     title: "Bingo, you successfully generated the proof!",
     content:
-      "Here is how it looks like: \n\n" +
+      "Here is what it looks like: \n\n" +
       transaction.value.transaction.accountUpdates[0].authorization.proof.slice(
         0,
         350
@@ -274,7 +271,10 @@ const broadcastTransaction = async () => {
   try {
     let sendZkapp = await transaction.value.send();
     let txHash = await sendZkapp.hash();
+
+    console.log("Transaction hash:");
     console.log(txHash);
+
     message.success(
       "Transaction sent 🚀. The state of the smart contract will be updated after the transaction is included into the next block!",
       { duration: 10000 }
