@@ -188,13 +188,15 @@ const getZkAppState = async (zkAppAddress) => {
 const createTransaction = async () => {
   loadingBar.start();
   steps.value[4].isLoading = true;
+
   console.log("Creating transaction");
+
   try {
     let feePayerKey = PrivateKey.fromBase58(privateKey_.value);
     transaction.value = await Mina.transaction(
       { feePayerKey, fee: "1" },
       () => {
-        zkApp.value.submitProofOfAge(
+        zkApp.value.giveAnswer(
           Field(proofOfAge.value),
           PublicKey.fromBase58(publicKey_.value)
         );
