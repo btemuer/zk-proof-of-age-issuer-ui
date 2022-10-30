@@ -195,7 +195,7 @@ const createTransaction = async () => {
   try {
     let feePayerKey = PrivateKey.fromBase58(privateKey_.value);
     transaction.value = await Mina.transaction(
-      { feePayerKey, fee: "300_000_000" },
+      { feePayerKey, fee: "100_000_000" },
       () => {
         zkApp.value.giveAnswer(
           Field(proofOfAge.value),
@@ -218,9 +218,11 @@ const createTransaction = async () => {
     loadingBar.error();
     return;
   }
+
   steps.value[4].isLoading = false;
   steps.value[4].isFinished = true;
   stepsStatus.value.current = 5;
+
   loadingBar.finish();
 };
 
@@ -346,7 +348,7 @@ const broadcastTransaction = async () => {
       >
         <n-step title="Check if the account has funds">
           <n-space vertical>
-            The transaction will cost 3 mina.
+            The transaction will cost 0.1 mina.
             <n-button
               @click="checkAccountBalance()"
               :loading="steps[1].isLoading"
