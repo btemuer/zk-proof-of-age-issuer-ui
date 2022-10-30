@@ -8,16 +8,18 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "simple-proof-of-age": "https://github.com/btemuer/simple-proof-of-age",
+    "simple-proof-of-age": "file:simple-proof-of-age",
+    "snarkyjs": "^0.6.1",
     "vite-plugin-cross-origin-isolation": "^0.1.6",
     "vue": "^3.2.41",
     "zkapp-cli": "^0.4.17"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.2.4",
-    "@vue/compiler-sfc": "^3.0.5",
+    "@babel/core": "^7.19.6",
+    "@vitejs/plugin-vue": "^3.2.0",
+    "@vue/compiler-sfc": "^3.2.41",
     "naive-ui": "^2.33.5",
     "vfonts": "^0.0.3",
-    "vite": "^2.4.0"
+    "vite": "^3.2.1"
   }
 }

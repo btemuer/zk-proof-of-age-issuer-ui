@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useLoadingBar, useMessage, useNotification } from "naive-ui";
 
-//import { SimpleAgeProof_ } from "simple-proof-of-age";
+import { SimpleAgeProof_ as ZkProofOfAge_ } from "simple-proof-of-age";
 
 import {
   Field,
