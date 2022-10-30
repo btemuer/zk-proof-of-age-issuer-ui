@@ -208,7 +208,7 @@ const createTransaction = async () => {
       { duration: 10000 }
     );
   } catch (error) {
-    message.error("Error", { duration: 10000 });
+    message.error("Error, could not create transaction", { duration: 10000 });
     steps.value[4].isLoading = false;
     steps.value[4].isFinished = true;
     stepsStatus.value.current = 4;
