@@ -203,11 +203,11 @@ const createTransaction = async () => {
         );
       }
     );
-    message.success("You have got the correct answer to the equation and ...", {
+    message.success("You seem to have a valid proof and ...", {
       duration: 10000,
     });
     message.success(
-      "You have successfully generated a transaction. But we have not sent it yet! Before doing that, we have to generate a proof.",
+      "You have successfully generated a transaction. It can be sent once the proof is generated in the next step.",
       { duration: 10000 }
     );
   } catch (error) {
@@ -249,12 +249,12 @@ const createProof = async () => {
   }
 
   notification.create({
-    title: "Bingo, you successfully generated the proof!",
+    title: "You successfully generated the proof!",
     content:
       "Here is what it looks like: \n\n" +
       transaction.value.transaction.accountUpdates[0].authorization.proof.slice(
         0,
-        350
+        128
       ) +
       " ...",
   });
@@ -279,16 +279,16 @@ const broadcastTransaction = async () => {
     console.log(txHash);
 
     message.success(
-      "Transaction sent 🚀. The state of the smart contract will be updated after the transaction is included into the next block!",
+      "Your transaction is sent. The state of the smart contract will be updated as soon as the transaction is included in the next block!",
       { duration: 10000 }
     );
     notification.create({
-      title: "Check when your transaction will be included into the next block",
+      title: "Transaction information",
       content:
-        "Transaction hash: " +
+        "Your transaction's  hash: " +
         txHash +
         "\n\n" +
-        "https://berkeley.minaexplorer.com/",
+        "You can check its status on https://berkeley.minaexplorer.com/",
     });
   } catch (error) {
     steps.value[6].isLoading = false;
@@ -340,7 +340,7 @@ const broadcastTransaction = async () => {
     <n-divider />
     <br /><br />
     <n-space vertical>
-      <n-h2>Here is what we are going to do:</n-h2>
+      <n-h2>Follow these steps to execute the smart contract:</n-h2>
       <n-steps
         vertical
         :current="stepsStatus.current"
