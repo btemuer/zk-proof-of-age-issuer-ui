@@ -370,8 +370,8 @@ const broadcastTransaction = async () => {
         </n-step>
         <n-step title="Check the smart contract state on-chain">
           <n-space vertical>
-            The state is a single boolean (yes/no) variable. It is an on-chain
-            value showing if the age has been proven successfully.
+            The state is a public key of the last account who proved their age
+            successfully.
             <n-button
               @click="getZkAppState(zkAppAddress)"
               :loading="steps[3].isLoading"
@@ -397,7 +397,7 @@ const broadcastTransaction = async () => {
               <b>locally in the browser</b>.
             </div>
             <n-input
-              placeholder="Your Proof of Age"
+              placeholder="How old are you?"
               v-model:value="proofOfAge"
             ></n-input>
             <n-button @click="createTransaction()" :loading="steps[4].isLoading"
