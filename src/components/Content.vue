@@ -211,11 +211,11 @@ const createTransaction = async () => {
     console.log("Fee Payer Key", feePayerKey);
     console.log(userOracleID_.value);
     console.log(userAge_.value);
-    console.log(number(userOracleID_.value));
-    console.log(number(userAge_.value));
+    console.log(parseInt(userOracleID_.value));
+    console.log(parseInt(userAge_.value));
     let answer = await computeAnswer(
-      number(userOracleID_.value),
-      number(userAge_.value)
+      parseInt(userOracleID_.value),
+      parseInt(userAge_.value)
     );
     console.log("Your proof", answer.toBigInt());
     transaction.value = await Mina.transaction(
