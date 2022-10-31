@@ -209,6 +209,10 @@ const createTransaction = async () => {
   try {
     let feePayerKey = PrivateKey.fromBase58(privateKey_.value);
     console.log("Fee Payer Key", feePayerKey);
+    console.log(userOracleID_.value);
+    console.log(userAge_.value);
+    console.log(number(userOracleID_.value));
+    console.log(number(userAge_.value));
     let answer = await computeAnswer(
       number(userOracleID_.value),
       number(userAge_.value)
