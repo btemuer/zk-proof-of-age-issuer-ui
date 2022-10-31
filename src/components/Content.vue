@@ -173,7 +173,7 @@ const getZkAppState = async () => {
     console.log("trying to create zkapp object", zkAppAddress_.value);
     console.log(PublicKey.fromBase58(zkAppAddress_.value));
     zkApp.value = new ZkProofOfAge_(PublicKey.fromBase58(zkAppAddress_.value));
-    let value = zkApp.value.value.get();
+    let value = zkApp.value.stateAddress.get();
     zkAppState.value = value;
 
     console.log(`Found deployed zkapp with state ${value.toBase58()}`);
