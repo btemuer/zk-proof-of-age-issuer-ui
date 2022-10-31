@@ -148,10 +148,14 @@ const getZkAppState = async (zkAppAddress) => {
   loadingBar.start();
   steps.value[3].isLoading = true;
 
-  console.log("PUBLICKEY: ", zkAppAddress, PublicKey.fromBase58(zkAppAddress));
+  console.log(
+    "PUBLICKEY: ",
+    zkAppAddress.value,
+    PublicKey.fromBase58(zkAppAddress.value)
+  );
 
   let { account, error } = await fetchAccount({
-    publicKey: PublicKey.fromBase58(zkAppAddress),
+    publicKey: PublicKey.fromBase58(zkAppAddress.value),
   });
 
   console.log("account", JSON.stringify(account, null, 2));
