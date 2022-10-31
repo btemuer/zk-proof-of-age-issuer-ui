@@ -167,6 +167,7 @@ const getZkAppState = async (zkAppAddress) => {
 
   // create the zkapp object
   try {
+    console.log("trying to create zkapp object");
     zkApp.value = new ZkProofOfAge_(PublicKey.fromBase58(zkAppAddress));
     let value = zkApp.value.value.get();
     zkAppState.value = value;
@@ -201,13 +202,11 @@ const createTransaction = async () => {
 
   try {
     let feePayerKey = PrivateKey.fromBase58(privateKey_.value);
+    let answer = await computeAnswer(userOracleID, userAge);
     transaction.value = await Mina.transaction(
       { feePayerKey, fee: "100_000_000" },
       () => {
-        zkApp.value.giveAnswer(
-          computeAnswer(userOracleID, userAge),
-          PublicKey.fromBase58(publicKey_.value)
-        );
+        zkApp.value.giveAnswer(answer, PublicKey.fromBase58(publicKey_.value));
       }
     );
     message.success("You seem to have a valid proof and ...", {
