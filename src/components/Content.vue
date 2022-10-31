@@ -434,7 +434,7 @@ const broadcastTransaction = async () => {
             </n-input-group>
             <n-input-group>
               <n-input-group-label>Your Age</n-input-group-label>
-              <n-input v-model:value="userAge" />
+              <n-input v-model:value="userAge_" />
             </n-input-group>
             <n-button @click="createTransaction()" :loading="steps[4].isLoading"
               >Call</n-button
