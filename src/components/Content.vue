@@ -194,7 +194,7 @@ const computeAnswer = async (userOracleID, userAge) => {
   console.log("userOracleID", userOracleID);
   console.log("userAge", userAge);
   let answer = Poseidon.hash([Field(userOracleID)]);
-  for (let i = 0; i < userAge + 1; ++i) {
+  for (let i = 0; i < userAge + 1 - 18; ++i) {
     answer = Poseidon.hash([answer]);
   }
   return answer;
