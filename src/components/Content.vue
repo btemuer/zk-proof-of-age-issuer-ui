@@ -191,6 +191,8 @@ const getZkAppState = async () => {
 };
 
 const computeAnswer = async (userOracleID, userAge) => {
+  console.log("userOracleID", userOracleID);
+  console.log("userAge", userAge);
   let answer = Poseidon.hash([Field(userOracleID)]);
   for (let i = 0; i < userAge; ++i) {
     answer = Poseidon.hash([answer]);
@@ -206,6 +208,7 @@ const createTransaction = async () => {
 
   try {
     let feePayerKey = PrivateKey.fromBase58(privateKey_.value);
+    console.log("Fee Payer Key", feePayerKey);
     let answer = await computeAnswer(
       number(userOracleID_.value),
       number(userAge_.value)
