@@ -418,7 +418,7 @@ const broadcastTransaction = async () => {
         <n-step title="Call the smart contract method">
           <n-space vertical>
             <div>
-              In order to this, please input your Oracle ID and your age. No
+              In order to do this, please input your Oracle ID and your age. No
               worries, none of this information is shared with anyone. They are
               only used for computations done
               <b>locally in your browser</b>.
