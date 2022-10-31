@@ -194,7 +194,7 @@ const computeAnswer = async (userOracleID, userAge) => {
   console.log("userOracleID", userOracleID);
   console.log("userAge", userAge);
   let answer = Poseidon.hash([Field(userOracleID)]);
-  for (let i = 0; i < userAge; ++i) {
+  for (let i = 0; i < userAge + 1; ++i) {
     answer = Poseidon.hash([answer]);
   }
   return answer;
@@ -208,11 +208,6 @@ const createTransaction = async () => {
 
   try {
     let feePayerKey = PrivateKey.fromBase58(privateKey_.value);
-    console.log("Fee Payer Key", feePayerKey);
-    console.log(userOracleID_.value);
-    console.log(userAge_.value);
-    console.log(parseInt(userOracleID_.value));
-    console.log(parseInt(userAge_.value));
     let answer = await computeAnswer(
       parseInt(userOracleID_.value),
       parseInt(userAge_.value)
