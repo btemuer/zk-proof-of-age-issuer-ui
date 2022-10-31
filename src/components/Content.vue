@@ -22,13 +22,12 @@ const notification = useNotification();
 const loadingSnarkyJs = ref(true);
 
 // zk-app
-const zkAppAddress = ref("");
+const zkAppAddress_ = ref("");
 const zkAppState = ref("");
 const zkApp = ref({});
 const transaction = ref({});
-const userOracleID = ref();
-const userAge = ref();
-const proofOfAge = ref();
+const userOracleID_ = ref("");
+const userAge_ = ref("");
 
 // keys
 const publicKey_ = ref("");
@@ -125,7 +124,7 @@ const checkAccountBalance = async () => {
   loadingBar.finish();
 };
 
-const compileZkApp = async (zkAppAddress) => {
+const compileZkApp = async () => {
   loadingBar.start();
   steps.value[2].isLoading = true;
   await sleep(500);
@@ -134,7 +133,7 @@ const compileZkApp = async (zkAppAddress) => {
   // compile the zkapp
   console.log("Before compiling");
   await sleep(1500);
-  console.log("Compiling smart contract...", zkAppAddress);
+  console.log("Compiling smart contract...", zkAppAddress_.value);
   await ZkProofOfAge_.compile();
   console.log(ZkProofOfAge_);
   console.log("Done.");
@@ -144,18 +143,18 @@ const compileZkApp = async (zkAppAddress) => {
   loadingBar.finish();
 };
 
-const getZkAppState = async (zkAppAddress) => {
+const getZkAppState = async () => {
   loadingBar.start();
   steps.value[3].isLoading = true;
 
   console.log(
     "PUBLICKEY: ",
-    zkAppAddress.value,
-    PublicKey.fromBase58(zkAppAddress.value)
+    zkAppAddress_.value,
+    PublicKey.fromBase58(zkAppAddress_.value)
   );
 
   let { account, error } = await fetchAccount({
-    publicKey: PublicKey.fromBase58(zkAppAddress.value),
+    publicKey: PublicKey.fromBase58(zkAppAddress_.value),
   });
 
   console.log("account", JSON.stringify(account, null, 2));
@@ -172,7 +171,7 @@ const getZkAppState = async (zkAppAddress) => {
   // create the zkapp object
   try {
     console.log("trying to create zkapp object");
-    zkApp.value = new ZkProofOfAge_(PublicKey.fromBase58(zkAppAddress));
+    zkApp.value = new ZkProofOfAge_(PublicKey.fromBase58(zkAppAddress_.value));
     let value = zkApp.value.value.get();
     zkAppState.value = value;
 
@@ -191,7 +190,7 @@ const getZkAppState = async (zkAppAddress) => {
 };
 
 const computeAnswer = async (userOracleID, userAge) => {
-  let answer = Poseidon.hash([userOracleID]);
+  let answer = Poseidon.hash([Field(userOracleID)]);
   for (let i = 0; i < userAge; ++i) {
     answer = Poseidon.hash([answer]);
   }
@@ -206,7 +205,10 @@ const createTransaction = async () => {
 
   try {
     let feePayerKey = PrivateKey.fromBase58(privateKey_.value);
-    let answer = await computeAnswer(userOracleID, userAge);
+    let answer = await computeAnswer(
+      number(userOracleID_.value),
+      number(userAge_.value)
+    );
     transaction.value = await Mina.transaction(
       { feePayerKey, fee: "100_000_000" },
       () => {
@@ -354,7 +356,7 @@ const broadcastTransaction = async () => {
       <br />
       <n-input-group>
         <n-input-group-label>zkApp Public Key</n-input-group-label>
-        <n-input v-model:value="zkAppAddress" />
+        <n-input v-model:value="zkAppAddress_" />
       </n-input-group>
     </n-space>
     <br /><br />
@@ -383,9 +385,7 @@ const broadcastTransaction = async () => {
               Check out the smart contract
               <a href="https://github.com/">here</a>.
             </div>
-            <n-button
-              @click="compileZkApp(zkAppAddress)"
-              :loading="steps[2].isLoading"
+            <n-button @click="compileZkApp()" :loading="steps[2].isLoading"
               >Compile</n-button
             >
           </n-space>
@@ -395,9 +395,7 @@ const broadcastTransaction = async () => {
             The state is a public key. It will be updated with your public key
             if you prove your age successfully, showing that the address belongs
             to a person above 18.
-            <n-button
-              @click="getZkAppState(zkAppAddress)"
-              :loading="steps[3].isLoading"
+            <n-button @click="getZkAppState()" :loading="steps[3].isLoading"
               >Check</n-button
             >
             <n-tag :size="'large'" style="padding: 30px" :bordered="false">
@@ -423,7 +421,7 @@ const broadcastTransaction = async () => {
             </div>
             <n-input-group>
               <n-input-group-label>Your Oracle ID</n-input-group-label>
-              <n-input v-model:value="userOracleID" />
+              <n-input v-model:value="userOracleID_" />
             </n-input-group>
             <n-input-group>
               <n-input-group-label>Your Age</n-input-group-label>
