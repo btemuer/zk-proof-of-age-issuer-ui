@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useLoadingBar, useMessage, useNotification } from "naive-ui";
 
-import { SimpleAgeProof_ as ZkProofOfAge_ } from "simple-proof-of-age";
+import { OracleAgeProof_ as ZkProofOfAge_ } from "zkapp-proof-of-age-oracle";
 
 import {
   Field,
@@ -12,6 +12,7 @@ import {
   isReady,
   fetchAccount,
   setGraphqlEndpoint,
+  Poseidon,
 } from "snarkyjs";
 
 // ui components
@@ -26,7 +27,7 @@ const zkAppState = ref("");
 const zkApp = ref({});
 const transaction = ref({});
 const userOracleID = ref();
-const useAge = ref();
+const userAge = ref();
 const proofOfAge = ref();
 
 // keys
@@ -44,10 +45,6 @@ const stepsStatus = ref({
   currentStatus: "process",
   current: 1,
 });
-
-//////////////////////////////////////////////////////////////////////////////
-//const zkAppAddress = "B62qqfd5tf33ZDECofurV6fny9dCUFuoqji85z9VNAqS3QMxJm99hoF";
-//////////////////////////////////////////////////////////////////////////////
 
 const steps = ref({
   1: {
@@ -188,6 +185,14 @@ const getZkAppState = async (zkAppAddress) => {
   loadingBar.finish();
 };
 
+const computeAnswer = async (userOracleID, userAge) => {
+  let answer = Poseidon.hash([userOracleID]);
+  for (let i = 0; i < userAge; ++i) {
+    answer = Poseidon.hash([answer]);
+  }
+  return answer;
+};
+
 const createTransaction = async () => {
   loadingBar.start();
   steps.value[4].isLoading = true;
@@ -200,8 +205,7 @@ const createTransaction = async () => {
       { feePayerKey, fee: "100_000_000" },
       () => {
         zkApp.value.giveAnswer(
-          Field(userOracleID.value),
-          Field(useAge.value),
+          computeAnswer(userOracleID, userAge),
           PublicKey.fromBase58(publicKey_.value)
         );
       }
@@ -420,7 +424,7 @@ const broadcastTransaction = async () => {
             </n-input-group>
             <n-input-group>
               <n-input-group-label>Your Age</n-input-group-label>
-              <n-input v-model:value="useAge" />
+              <n-input v-model:value="userAge" />
             </n-input-group>
             <n-button @click="createTransaction()" :loading="steps[4].isLoading"
               >Call</n-button
