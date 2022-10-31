@@ -170,7 +170,8 @@ const getZkAppState = async () => {
 
   // create the zkapp object
   try {
-    console.log("trying to create zkapp object");
+    console.log("trying to create zkapp object", zkAppAddress_.value);
+    console.log(PublicKey.fromBase58(zkAppAddress_.value));
     zkApp.value = new ZkProofOfAge_(PublicKey.fromBase58(zkAppAddress_.value));
     let value = zkApp.value.value.get();
     zkAppState.value = value;
