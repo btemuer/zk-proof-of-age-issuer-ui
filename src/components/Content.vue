@@ -182,6 +182,7 @@ const getZkAppState = async () => {
     steps.value[3].isFinished = true;
     stepsStatus.value.current = 3;
     loadingBar.error();
+    console.log(error);
     return;
   }
   steps.value[3].isLoading = false;
