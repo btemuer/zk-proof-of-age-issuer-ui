@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 <template>
   <br /><br />
-  <n-space justify="center">
+  <n-space vertical justify="center">
     <n-h3
       >Zero Knowledge Proof of Age - PageApp - a zkApp by <b>Buğrahan Temür</b>
     </n-h3>
