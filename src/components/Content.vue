@@ -350,10 +350,14 @@ const broadcastTransaction = async () => {
         <n-input v-model:value="privateKey_" />
       </n-input-group>
       <br />
-      <n-h2> The identity issuer must have deployed a zkApp for you. </n-h2>
+      <n-h2>
+        The identity issuer must have deployed a personalized zkApp for you.
+      </n-h2>
       <n-text>
-        Please enter the public key of this address. You will only be able to
-        interact with this zkApp if you are the person the issuer knows.</n-text
+        Please enter the public key of this address. This address contains
+        encrypted information no one can trace back to you. You will only be
+        able to interact with this zkApp if you are the person the issuer
+        knows.</n-text
       >
       <br />
       <n-input-group>
@@ -385,7 +389,9 @@ const broadcastTransaction = async () => {
           <n-space vertical>
             <div>
               Check out the smart contract
-              <a href="https://github.com/">here</a>.
+              <a href="https://github.com/btemuer/zkapp-proof-of-age-issuer"
+                >here</a
+              >.
             </div>
             <n-button @click="compileZkApp()" :loading="steps[2].isLoading"
               >Compile</n-button
