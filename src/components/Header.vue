@@ -7,7 +7,7 @@ import { ref } from "vue";
     <template #title>
       <a href="/" style="text-decoration: none; color: inherit">
         <n-text depth="3">Zero Knowledge</n-text> <b>Proof of Age</b>
-        <n-text depth="3"> with Oracle</n-text>
+        <n-text depth="3"> with an Identity Issuer</n-text>
       </a>
     </template>
     <template #header> </template>

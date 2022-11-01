@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useLoadingBar, useMessage, useNotification } from "naive-ui";
 
-import { OracleAgeProof_ as ZkProofOfAge_ } from "zkapp-proof-of-age-oracle";
+import { IssuerAgeProof_ as ZkProofOfAge_ } from "zkapp-proof-of-age-issuer";
 
 import {
   Field,
@@ -26,7 +26,7 @@ const zkAppAddress_ = ref("");
 const zkAppState = ref("");
 const zkApp = ref({});
 const transaction = ref({});
-const userOracleID_ = ref("");
+const userIDIssuerID_ = ref("");
 const userAge_ = ref("");
 
 // keys
@@ -190,10 +190,8 @@ const getZkAppState = async () => {
   loadingBar.finish();
 };
 
-const computeAnswer = async (userOracleID, userAge) => {
-  console.log("userOracleID", userOracleID);
-  console.log("userAge", userAge);
-  let answer = Poseidon.hash([Field(userOracleID)]);
+const computeAnswer = async (userIDIssuerID, userAge) => {
+  let answer = Poseidon.hash([Field(userIDIssuerID)]);
   for (let i = 0; i < userAge + 1 - 18; ++i) {
     answer = Poseidon.hash([answer]);
   }
@@ -209,7 +207,7 @@ const createTransaction = async () => {
   try {
     let feePayerKey = PrivateKey.fromBase58(privateKey_.value);
     let answer = await computeAnswer(
-      parseInt(userOracleID_.value),
+      parseInt(userIDIssuerID_.value),
       parseInt(userAge_.value)
     );
     console.log("Your proof", answer.toBigInt());
@@ -352,10 +350,10 @@ const broadcastTransaction = async () => {
         <n-input v-model:value="privateKey_" />
       </n-input-group>
       <br />
-      <n-h2> The oracle must have deployed a zkApp for you. </n-h2>
+      <n-h2> The identity issuer must have deployed a zkApp for you. </n-h2>
       <n-text>
         Please enter the public key of this address. You will only be able to
-        interact with this zkApp if you are the person the Oracle knows.</n-text
+        interact with this zkApp if you are the person the issuer knows.</n-text
       >
       <br />
       <n-input-group>
@@ -418,14 +416,14 @@ const broadcastTransaction = async () => {
         <n-step title="Call the smart contract method">
           <n-space vertical>
             <div>
-              In order to do this, please input your Oracle ID and your age. No
-              worries, none of this information is shared with anyone. They are
-              only used for computations done
+              In order to do this, please input your identity issuer ID and your
+              age. No worries, none of this information is shared with anyone.
+              They are only used for computations done
               <b>locally in your browser</b>.
             </div>
             <n-input-group>
-              <n-input-group-label>Your Oracle ID</n-input-group-label>
-              <n-input v-model:value="userOracleID_" />
+              <n-input-group-label>Your Issuer ID</n-input-group-label>
+              <n-input v-model:value="userIDIssuerID_" />
             </n-input-group>
             <n-input-group>
               <n-input-group-label>Your Age</n-input-group-label>
