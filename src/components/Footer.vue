@@ -4,14 +4,13 @@ import { ref } from "vue";
 
 <template>
   <br /><br />
-  <n-space vertical justify="center">
+  <n-space vertical justify="center" align>
     <n-h3
-      >Zero Knowledge Proof of Age - PageApp - a zkApp by <b>Buğrahan Temür</b>
+      >Zero Knowledge Proof of Age - PageApp - a zkApp by <b>Buğrahan Temür</b>.
     </n-h3>
-    <br />
     <n-h4
       >Credits to <a href="https://github.com/RaidasGrisk">ioWxss6#6308</a> for
-      the UI inspiration</n-h4
+      the UI inspiration.</n-h4
     >
   </n-space>
   <br /><br />
