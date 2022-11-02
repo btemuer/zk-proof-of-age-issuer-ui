@@ -1,4 +1,4 @@
-# Page App
+# PageApp
 
 The user interface for the PageApp - a zero knowledge proof of age.
 
